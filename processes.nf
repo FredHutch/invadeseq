@@ -50,7 +50,7 @@ process umi_annotator {
     """#!/bin/bash
 set -e
 
-python UMI_annotator.py \
+UMI_annotator.py \
     "${bam}" \
     '' \
     "${barcodes}" \

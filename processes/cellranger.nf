@@ -3,8 +3,8 @@ process cellranger_count_gex {
     label "cpu_large"
 
     input:
-    tuple val(sample), path("inputs/")
-    path "cellranger_db/"
+    tuple val(sample), path("inputs")
+    path "cellranger_db"
 
     output:
     tuple val(sample), path("*")

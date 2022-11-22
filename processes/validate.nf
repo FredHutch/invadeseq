@@ -15,6 +15,8 @@ print("Reading in ${manifest.name} as CSV")
 df = pd.read_csv("${manifest.name}")
 print(f"Read in {df.shape[0]:,} rows")
 
+print(df.to_csv(index=None))
+
 required_columns = ['sample', 'gex', 'microbial']
 msg = "Manifest must contain columns: {', '.join(required_columns)}"
 for cname in required_columns:

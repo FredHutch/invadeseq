@@ -33,7 +33,11 @@ workflow invadeseq_wf {
         ).toSortedList()
         .set { fastq_ch }
 
-    log.info"""Found ${fastq_ch.size} FASTQ files in ${params.fastq_dir}"""
+    // Log the number of FASTQ files found
+    fastq_ch
+        .flatten()
+        .count()
+        .view { n -> "Found ${n} FASTQ files in ${params.fastq_dir}" }
 
     // Parse the manifest file provided by the user
     Channel

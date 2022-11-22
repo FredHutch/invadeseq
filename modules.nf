@@ -1,5 +1,5 @@
 
-include { pathseq } from "./processes.nf"
+include { pathseq; umi_annotator } from "./processes.nf"
 
 workflow visium_wf {
 

@@ -28,7 +28,7 @@ workflow visium_wf {
             it -> [
                 it.name,
                 file(
-                    "${it.name}/${params.spaceranger_bam_path}",
+                    "${it.absolutePath}/${params.spaceranger_bam_path}",
                     checkIfExists: true,
                     type: "file"
                 )

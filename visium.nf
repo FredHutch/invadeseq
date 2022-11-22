@@ -10,7 +10,7 @@ output_dir      : ${params.output_dir}
 pathseq_dir     : ${params.pathseq_dir}
 """
 
-incluce { visium_wf } from "./modules.nf"
+include { visium_wf } from "./modules.nf"
 
 workflow {
 

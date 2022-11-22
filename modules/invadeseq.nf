@@ -36,8 +36,8 @@ workflow visium_wf {
         .map {
             it -> [
                 it.sample,
-                file(it.gex, type: "folder", checkIfExists: true),
-                file(it.16S, type: "folder", checkIfExists: true)
+                file(it.gex, type: "folder", checkIfExists: true)
+                // file(it.16S, type: "folder", checkIfExists: true)
             ]
         }
         .set { manifest }

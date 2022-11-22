@@ -46,12 +46,12 @@ workflow visium_wf {
             it -> [
                 it.name,
                 file(
-                    "${it.name}/${params.spaceranger_barcodes_path}",
-                    checkIfExists: true,
+                    "${params.bam_folder}/${it.name}/${params.spaceranger_barcodes_path}",
                     type: "file"
                 )
             ]
         }
+        .filter { !it[1].isEmpty() }
         .set { barcodes_ch }
 
     pathseq(

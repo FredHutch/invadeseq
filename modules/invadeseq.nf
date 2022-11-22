@@ -48,7 +48,8 @@ workflow invadeseq_wf {
 
     // Run the gene expression analysis for each sample
     cellranger_count_gex(
-        manifest.map { it -> [it[0], it[1]] }
+        manifest.map { it -> [it[0], it[1]] },
+        cellranger_db
     )
 
     // // Run pathseq on the output from cellranger count for the GEX data

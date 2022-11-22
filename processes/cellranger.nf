@@ -14,9 +14,9 @@ process cellranger_count_gex {
 set -e
 
 cellranger count \
-    --id=${gex_id} \
+    --id=${sample} \
     --transcriptome=\$PWD/cellranger_db/ \
     --fastqs=fastqs/ \
-    --sample=${sample}
+    --sample=${gex_id}
     """
 }

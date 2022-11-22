@@ -28,12 +28,12 @@ workflow visium_wf {
             it -> [
                 it.name,
                 file(
-                    "${it.absolutePath}/${params.spaceranger_bam_path}",
-                    checkIfExists: true,
+                    "${params.bam_folder}/${it.name}/${params.spaceranger_bam_path}",
                     type: "file"
                 )
             ]
         }
+        .filter { !it[1].isEmpty() }
         .set { bam_ch }
 
     Channel

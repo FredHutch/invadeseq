@@ -1,7 +1,7 @@
 // include { pathseq } from "./../processes/pathseq.nf"
 include { cellranger_count_gex } from "./../processes/cellranger.nf"
 
-workflow visium_wf {
+workflow invadeseq_wf {
 
     if ( "${params.manifest}" == "false" ){error "Must provide parameter manifest"}
     if ( "${params.output_dir}" == "false" ){error "Must provide parameter output_dir"}

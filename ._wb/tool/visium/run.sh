@@ -11,7 +11,7 @@ echo
 echo Starting workflow
 nextflow \
     run \
-    "${TOOL_REPO}" \
+    "${TOOL_REPO}/visium.nf" \
     --output_dir "${PWD}" \
     -params-file ._wb/tool/params.json \
     -with-dag \

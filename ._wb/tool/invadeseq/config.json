@@ -1,0 +1,22 @@
+{
+    "$schema": "https://raw.githubusercontent.com/FredHutch/bash-workbench/main/docs/schema.json",
+    "name": "INVADEseq",
+    "description": "Analysis of 10X Chromium data for both pathogens and host gene expression",
+    "args": {
+        "manifest": {
+            "help": "Manifest listing location of input data",
+            "wb_type": "file",
+            "required": true
+        },
+        "cellranger_db": {
+            "help": "Folder containing cellranger database",
+            "wb_type": "folder",
+            "required": true
+        },
+        "pathseq_db": {
+            "help": "Folder containing pathseq database",
+            "wb_type": "folder",
+            "required": true
+        }
+    }
+}

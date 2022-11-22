@@ -8,7 +8,7 @@
             "wb_type": "folder",
             "required": true
         },
-        "pathseq_dir": {
+        "pathseq_db": {
             "help": "Folder containing pathseq database",
             "wb_type": "folder",
             "required": true

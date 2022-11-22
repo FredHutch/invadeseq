@@ -1,9 +1,11 @@
 // include { pathseq } from "./../processes/pathseq.nf"
 include { cellranger_count_gex } from "./../processes/cellranger.nf"
+include { validate_manifest } from "./../processes/validate.nf"
 
 workflow invadeseq_wf {
 
     if ( "${params.manifest}" == "false" ){error "Must provide parameter manifest"}
+    if ( "${params.fastq_dir}" == "false" ){error "Must provide parameter fastq_dir"}
     if ( "${params.output_dir}" == "false" ){error "Must provide parameter output_dir"}
     if ( "${params.cellranger_db}" == "false" ){error "Must provide parameter cellranger_db"}
     if ( "${params.pathseq_db}" == "false" ){error "Must provide parameter pathseq_db"}
@@ -22,13 +24,26 @@ workflow invadeseq_wf {
         type: "dir"
     )
 
+    // Get the complete list of FASTQ files in the input directory
+    Channel
+        .fromPath(
+            "${params.fastq_dir}**.fastq.gz",
+            type: "file",
+            checkIfExists: true
+        ).toSortedList()
+        .set { fastq_ch }
+
+    log.info"""Found ${fastq_ch.size} FASTQ files in ${params.fastq_dir}"""
+
     // Parse the manifest file provided by the user
     Channel
         .fromPath(
             "${params.manifest}",
             type: "file",
             checkIfExists: true
-        )
+        ) | validate_manifest
+
+    validate_manifest.out
         .splitCsv(
             header: true,
             strip: true
@@ -36,8 +51,8 @@ workflow invadeseq_wf {
         .map {
             it -> [
                 it.sample,
-                file(it.gex, type: "folder", checkIfExists: true)
-                // file(it.16S, type: "folder", checkIfExists: true)
+                it.gex,
+                it.microbial
             ]
         }
         .set { manifest }
@@ -49,6 +64,7 @@ workflow invadeseq_wf {
     // Run the gene expression analysis for each sample
     cellranger_count_gex(
         manifest.map { it -> [it[0], it[1]] },
+        fastq_ch,
         cellranger_db
     )
 

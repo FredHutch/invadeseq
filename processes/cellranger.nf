@@ -3,7 +3,8 @@ process cellranger_count_gex {
     label "cpu_large"
 
     input:
-    tuple val(sample), path("inputs")
+    tuple val(sample), path(gex_id)
+    path "fastqs/"
     path "cellranger_db"
 
     output:
@@ -13,9 +14,9 @@ process cellranger_count_gex {
 set -e
 
 cellranger count \
-    --id=${sample} \
+    --id=${gex_id} \
     --transcriptome=\$PWD/cellranger_db/ \
-    --fastqs=\$PWD/inputs/ \
+    --fastqs=fastqs/ \
     --sample=${sample}
     """
 }

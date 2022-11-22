@@ -4,8 +4,13 @@
     "description": "Analysis of 10X Chromium data for both pathogens and host gene expression",
     "args": {
         "manifest": {
-            "help": "Manifest listing location of input data",
+            "help": "Manifest describing the paired datasets used for each sample",
             "wb_type": "file",
+            "required": true
+        },
+        "fastq_dir": {
+            "help": "Base folder which contains all of the FASTQ inputs",
+            "wb_type": "folder",
             "required": true
         },
         "cellranger_db": {

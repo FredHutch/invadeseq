@@ -3,7 +3,7 @@ process cellranger_count_gex {
     label "cpu_large"
 
     input:
-    tuple val(sample), path(gex_id)
+    tuple val(sample), val(gex_id)
     path "fastqs/"
     path "cellranger_db"
 

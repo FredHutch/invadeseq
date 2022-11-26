@@ -1,6 +1,7 @@
 process umi_annotator {
     container "${params.container__python}"
     publishDir "${params.output_dir}/${samplename}", mode: 'copy', overwrite: true
+    tag "${samplename}"
 
     input:
     tuple val(samplename), path(bam), path(barcodes), path("pathseq_path/")

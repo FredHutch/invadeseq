@@ -1,6 +1,7 @@
 process cellranger_count_gex {
     container "${params.container__cellranger}"
     label "cpu_large"
+    tag "${sample}"
 
     input:
     tuple val(sample), val(gex_id)

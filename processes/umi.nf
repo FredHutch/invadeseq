@@ -1,9 +1,9 @@
-process umi_annotator {
+process generate_umi_gex {
     container "${params.container__python}"
     publishDir "${params.output_dir}/${samplename}", mode: 'copy', overwrite: true
 
     input:
-    tuple val(samplename), path(bam), path(barcodes), path("pathseq_path/")
+    tuple val(samplename), path("pathseq_outputs/"), path("cellranger_outputs/")
 
     output:
     path "*"
@@ -12,12 +12,22 @@ process umi_annotator {
     """#!/bin/bash
 set -e
 
+echo CONTENTS OF cellranger_outputs/:
+ls -lah cellranger_outputs
+echo
+echo
+
+echo CONTENTS OF pathseq_outputs/:
+ls -lah pathseq_outputs
+echo
+echo
+
 UMI_matrix.py \
-    "${bam}" \
+    cellranger_outputs/*.bam \
     '${samplename}' \
-    "${barcodes}" \
-    pathseq_path/${samplename}.pathseq.complete.bam \
-    pathseq_path/${samplename}.pathseq.complete.csv \
+    cellranger_outputs/*.barcodes.txt.gz \
+    pathseq_outputs/${samplename}.pathseq.complete.bam \
+    pathseq_outputs/${samplename}.pathseq.complete.csv \
     ${samplename}.visium.raw_matrix.readname \
     ${samplename}.visium.raw_matrix.unmap_cbub.bam \
     ${samplename}.visium.raw_matrix.unmap_cbub.fasta \

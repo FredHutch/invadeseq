@@ -8,7 +8,7 @@ process cellranger_count_gex {
     path "cellranger_db"
 
     output:
-    tuple val(sample), path("*")
+    tuple val(sample), path("${sample}/*")
 
     """#!/bin/bash
 set -e

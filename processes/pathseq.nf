@@ -2,7 +2,7 @@ process pathseq {
     memory "${params.pathseq_mem_gb}.GB"
     cpus "${params.pathseq_cpus}"
     container "${params.container__pathseq}"
-    publishDir "${params.output_dir}/${samplename}", mode: 'copy', overwrite: true
+    publishDir "${params.output_dir}/${samplename}/${params.pathseq_subfolder}", mode: 'copy', overwrite: true
     
     input:
     tuple val(samplename), path(bam)

@@ -1,5 +1,6 @@
 // include { pathseq } from "./../processes/pathseq.nf"
 include { cellranger_count_gex } from "./../processes/cellranger.nf"
+include { pathseq as pathseq_gex } from "./../processes/pathseq.nf" addParams(pathseq_subfolder: "pathseq_gex")
 include { validate_manifest } from "./../processes/validate.nf"
 
 workflow invadeseq_wf {
@@ -72,8 +73,11 @@ workflow invadeseq_wf {
         cellranger_db
     )
 
-    // // Run pathseq on the output from cellranger count for the GEX data
-    // pathseq_gex(cellranger_count_gex.out)
+    // Run pathseq on the output from cellranger count for the GEX data
+    pathseq_gex(
+        cellranger_count_gex.out,
+        pathseq_db
+    )
 
     // // Generate the UMI matrix for GEX data
     // generate_umi_gex(pathseq_gex.out)

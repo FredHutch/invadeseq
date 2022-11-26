@@ -10,7 +10,7 @@ process pathseq {
     path "pathseq_db/"
 
     output:
-    tuple val(sample), path(bam)
+    tuple val(sample), path("${samplename}.pathseq.*")
 
     script:
     """#!/bin/bash

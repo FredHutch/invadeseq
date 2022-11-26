@@ -3,6 +3,7 @@ process pathseq {
     cpus "${params.pathseq_cpus}"
     container "${params.container__pathseq}"
     publishDir "${params.output_dir}/${samplename}/${params.pathseq_subfolder}", mode: 'copy', overwrite: true
+    tag "${samplename}"
     
     input:
     tuple val(samplename), path(bam)
@@ -24,15 +25,15 @@ gatk \
     --input ${bam} \
     --filter-bwa-image pathseq_db/pathseq_host.fa.img \
     --kmer-file pathseq_db/pathseq_host.bfi \
-    --min-clipped-read-length 60 \
-    --microbe-fasta pathseq_db/pathseq_microbe.fa \
+    --min-clipped-read-length ${params.pathseq_min_clipped_read_length} \
+    --microbe-dict pathseq_db/pathseq_microbe.dict \
     --microbe-bwa-image pathseq_db/pathseq_microbe.fa.img \
     --taxonomy-file pathseq_db/pathseq_taxonomy.db \
     --output ${samplename}.pathseq.complete.bam \
     --scores-output ${samplename}.pathseq.complete.csv \
     --is-host-aligned false \
     --filter-duplicates false \
-    --min-score-identity .7
+    --min-score-identity ${params.pathseq_min_score_identity}
     """
 }
 

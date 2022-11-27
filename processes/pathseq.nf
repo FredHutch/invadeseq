@@ -7,7 +7,7 @@ process pathseq {
     
     input:
     tuple val(samplename), path(bam)
-    path "pathseq_db/"
+    path "pathseq_db"
 
     output:
     tuple val(sample), path("${samplename}.pathseq.*")

@@ -74,9 +74,18 @@ workflow invadeseq_wf {
         cellranger_db
     )
 
+    // Make a channel with just the BAM produced by the cellranger count command
+    cellranger_count_gex
+        .out
+        .transpose()
+        .filter {
+            it[1].name.endsWith('.bam')
+        }
+        .set { cellranger_count_gex_bam }
+
     // Run pathseq on the output from cellranger count for the GEX data
     pathseq_gex(
-        cellranger_count_gex.out,
+        cellranger_count_gex_bam,
         pathseq_db
     )
 

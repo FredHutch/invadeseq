@@ -4,7 +4,7 @@ process bam_to_fastq {
     tag "${sample}"
 
     input:
-    tuple val(sample), val(bam)
+    tuple val(sample), path(bam)
 
     output:
     tuple val(sample), path("${sample}.r1.fq"), path("${sample}.r2.fq")

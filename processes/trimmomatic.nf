@@ -12,8 +12,10 @@ process trimmomatic {
 """#!/bin/bash
 set -euo pipefail
 
+EBROOTTRIMMOMATIC=/usr/local/share/trimmomatic-0.32-4/
+
 java -jar \
-    \$EBROOTTRIMMOMATIC/trimmomatic-0.39.jar SE \
+    \$EBROOTTRIMMOMATIC/trimmomatic.jar SE \
     -threads ${task.cpus} \
     ${fastq} \
     SE_trim.fq \

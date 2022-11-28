@@ -1,0 +1,37 @@
+{
+    "$schema": "https://raw.githubusercontent.com/FredHutch/bash-workbench/main/docs/schema.json",
+    "name": "SLURM (FredHutch)",
+    "description": "Run on the Fred Hutch SLURM cluster with Singularity containers",
+    "args": {
+        "scratch_dir": {
+            "help": "Folder used for temporary storage of intermediate files and cached Singularity images (typically on the scratch filesystem, e.g. /fh/scratch/delete90/lastname_f/temp/nextflow/)",
+            "required": true,
+            "wb_env": "SCRATCH_DIR",
+            "wb_type": "folder"
+        },
+        "queue": {
+            "help": "Job submission queue",
+            "wb_env": "QUEUE",
+            "wb_type": "select",
+            "wb_choices": ["campus-new", "restart-new"],
+            "default": "campus-new"
+        },
+        "max_retries": {
+            "help": "Maximum number of times to retry failed jobs",
+            "wb_env": "MAX_RETRIES",
+            "wb_type": "integer",
+            "default": "2"
+        },
+        "tower_token": {
+            "help": "Personal token used to monitor workflow status in Tower",
+            "wb_type": "string",
+            "wb_env": "TOWER_ACCESS_TOKEN"
+        },
+        "nxf_ver": {
+            "help": "Nextflow Version",
+            "wb_env": "NXF_VER",
+            "wb_type": "string",
+            "default": "22.10.0"
+        }
+    }
+}

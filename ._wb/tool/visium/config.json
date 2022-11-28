@@ -1,0 +1,27 @@
+{
+    "$schema": "https://raw.githubusercontent.com/FredHutch/bash-workbench/main/docs/schema.json",
+    "name": "visium",
+    "description": "Analysis of Visium data for both pathogens and host gene expression",
+    "args": {
+        "bam_folder": {
+            "help": "Folder containing spaceranger outputs",
+            "wb_type": "folder",
+            "required": true
+        },
+        "pathseq_db": {
+            "help": "Folder containing pathseq database",
+            "wb_type": "folder",
+            "required": true
+        },
+        "spaceranger_bam_path": {
+            "help": "Subpath within spaceranger outputs for read alignments (BAM)",
+            "wb_type": "string",
+            "default": "outs/possorted_genome_bam.bam"
+        },
+        "spaceranger_barcodes_path": {
+            "help": "Subpath within spaceranger outputs for barcodes",
+            "wb_type": "string",
+            "default": "outs/raw_feature_bc_matrix/barcodes.tsv.gz"
+        }
+    }
+}

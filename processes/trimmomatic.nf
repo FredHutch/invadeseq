@@ -1,5 +1,5 @@
 process trimmomatic {
-    container "${container__trimmomatic}"
+    container "${params.container__trimmomatic}"
     label "cpu_large"
     tag "${sample}"
 

@@ -1,6 +1,6 @@
-process generate_umi_gex {
+process generate_umi {
     container "${params.container__python}"
-    publishDir "${params.output_dir}/${samplename}", mode: 'copy', overwrite: true
+    publishDir "${params.output_dir}/${samplename}/${params.publish_subfolder}", mode: 'copy', overwrite: true
 
     input:
     tuple val(samplename), path("pathseq_outputs/"), path("cellranger_outputs/")

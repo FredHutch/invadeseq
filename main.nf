@@ -12,6 +12,12 @@ cellranger_db   : ${params.cellranger_db}
 pathseq_db      : ${params.pathseq_db}
 
 cellranger      : ${params.container__cellranger}
+bedtools        : ${params.container__bedtools}
+fastqc          : ${params.container__fastqc}
+trimmomatic     : ${params.container__trimmomatic}
+
+max_cpus        : ${params.max_cpus}
+max_memory      : ${params.max_memory}
 """
 
 include { invadeseq_wf } from "./modules/invadeseq.nf"

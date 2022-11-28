@@ -5,6 +5,9 @@ include { pathseq as pathseq_gex } from "./../processes/pathseq.nf" addParams(pa
 include { generate_umi_gex } from "./../processes/umi.nf"
 include { validate_manifest } from "./../processes/validate.nf"
 include { bam_to_fastq } from "./../processes/bedtools.nf"
+include { fastqc as fastqc_raw } from "./../processes/fastqc.nf" addParams(fastqc_subfolder: "preqc")
+include { fastqc as fastqc_trimmed } from "./../processes/fastqc.nf" addParams(fastqc_subfolder: "postqc")
+include { trimmomatic } from "./../processes/trimmomatic.nf"
 
 workflow invadeseq_wf {
 
@@ -132,14 +135,22 @@ workflow invadeseq_wf {
     )
     // Output: tuple val(sample), path(R1), path(R2)
 
-    // // Run FASTQC on the raw reads
-    // fastqc_raw(bam_to_fastq.out)
+    // Run FASTQC on the raw read 1
+    fastqc_raw(
+        bam_to_fastq
+            .out
+            .map { it -> [it[0], it[1]] }
+    )
 
-    // // Run Trimmomatic on the raw reads
-    // trimmomatic(bam_to_fastq.out)
+    // Run Trimmomatic on the raw reads, but just the read 1
+    trimmomatic(
+        bam_to_fastq
+            .out
+            .map { it -> [it[0], it[1]] }
+    )
 
-    // // Run FASTQC on the trimmed reads
-    // fastqc_trimmed(trimmomatic.out)
+    // Run FASTQC on the trimmed reads
+    fastqc_trimmed(trimmomatic.out)
 
     // // Make BAM files in preparation for pathseq
     // fastq_to_bam(trimmomatic.out)

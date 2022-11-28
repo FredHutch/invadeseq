@@ -14,7 +14,7 @@ set -e
 
 EBROOTPICARD=/usr/local/share/picard-2.27.4-0
 
-java -Xmx700G -jar $EBROOTPICARD/picard.jar FastqToSam \
+java -Xmx700G -jar \$EBROOTPICARD/picard.jar FastqToSam \
     FASTQ=${fastq} \
     OUTPUT=${sample}.bam \
     SAMPLE_NAME=${sample}

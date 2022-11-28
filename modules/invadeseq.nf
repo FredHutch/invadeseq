@@ -3,8 +3,9 @@ include { cellranger_count as cellranger_count_gex } from "./../processes/cellra
 include { cellranger_count as cellranger_count_16S } from "./../processes/cellranger.nf"
 include { pathseq as pathseq_gex } from "./../processes/pathseq.nf" addParams(pathseq_subfolder: "pathseq_gex")
 include { pathseq as pathseq_16S } from "./../processes/pathseq.nf" addParams(pathseq_subfolder: "pathseq_16S")
-include { generate_umi as generate_umi_gex } from "./../processes/umi.nf" addParams(publish_subfolder: "umi_gex")
-include { generate_umi as generate_umi_16S } from "./../processes/umi.nf" addParams(publish_subfolder: "umi_16S")
+include { generate_umi as generate_umi_gex } from "./../processes/umi.nf" addParams(data_type: "gex")
+include { generate_umi as generate_umi_16S } from "./../processes/umi.nf" addParams(data_type: "16S")
+include { combine_all } from "./../processes/umi.nf"
 include { validate_manifest } from "./../processes/validate.nf"
 include { bam_to_fastq } from "./../processes/bedtools.nf"
 include { fastqc as fastqc_raw } from "./../processes/fastqc.nf" addParams(fastqc_subfolder: "preqc")
@@ -91,6 +92,15 @@ workflow invadeseq_wf {
         }
         .set { cellranger_count_gex_bam }
 
+    // Make a channel with just the barcodes produced by the cellranger count command
+    cellranger_count_gex
+        .out
+        .transpose()
+        .filter {
+            it[1].name.endsWith('barcodes.tsv.gz')
+        }
+        .set { cellranger_count_gex_barcodes }
+
     // Run pathseq on the output from cellranger count for the GEX data
     pathseq_gex(
         cellranger_count_gex_bam,
@@ -102,10 +112,11 @@ workflow invadeseq_wf {
         pathseq_gex
             .out
             .join(
-                cellranger_count_gex
-                    .out
+                cellranger_count_gex_bam
             )
-    )
+            .join(
+                cellranger_count_gex_barcodes
+            )    )
 
     //////////////////////
     // ANALYZE 16S DATA //
@@ -164,21 +175,29 @@ workflow invadeseq_wf {
         pathseq_16S
             .out
             .join(
-                cellranger_count_16S
-                    .out
+                cellranger_count_16S_bam
+            )
+            .join(
+                cellranger_count_gex_barcodes
             )
     )
 
-    // //////////////////////////////
-    // // COMBINE GEX AND 16S DATA //
-    // //////////////////////////////
-    // combine_all(
-    //     generate_umi_gex
-    //         .out
-    //         .join(
-    //             generate_umi_16S
-    //                 .out
-    //         )
-    // )
+    //////////////////////////////
+    // COMBINE GEX AND 16S DATA //
+    //////////////////////////////
+    combine_all(
+        generate_umi_gex
+            .out
+            .flatten()
+            .mix(
+                generate_umi_16S
+                    .out
+                    .flatten()
+            )
+            .filter {
+                it.name.endsWith('genus.csv')
+            }
+            .toSortedList()
+   )
 
 }

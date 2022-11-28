@@ -1,9 +1,9 @@
 process generate_umi {
     container "${params.container__python}"
-    publishDir "${params.output_dir}/${samplename}/${params.publish_subfolder}", mode: 'copy', overwrite: true
+    publishDir "${params.output_dir}/${samplename}/umi_${params.data_type}", mode: 'copy', overwrite: true
 
     input:
-    tuple val(samplename), path("pathseq_outputs/"), path("cellranger_outputs/")
+    tuple val(samplename), path("pathseq_outputs/"), path(bam), path(barcodes)
 
     output:
     path "*"
@@ -23,18 +23,43 @@ echo
 echo
 
 UMI_matrix.py \
-    cellranger_outputs/possorted_genome_bam.bam \
+    ${bam} \
     '${samplename}' \
-    cellranger_outputs/raw_feature_bc_matrix/barcodes.tsv.gz \
+    ${barcodes} \
     pathseq_outputs/${samplename}.pathseq.complete.bam \
     pathseq_outputs/${samplename}.pathseq.complete.csv \
-    ${samplename}.visium.raw_matrix.readname \
-    ${samplename}.visium.raw_matrix.unmap_cbub.bam \
-    ${samplename}.visium.raw_matrix.unmap_cbub.fasta \
-    ${samplename}.visium.raw_matrix.list \
-    ${samplename}.visium.raw.raw_matrix.readnamepath \
-    ${samplename}.visium.raw_matrix.genus.cell \
-    ${samplename}.visium.raw_matrix.genus.csv \
-    ${samplename}.visium.raw_matrix.validate.csv
+    ${samplename}.invadeseq.${params.data_type}.readname \
+    ${samplename}.invadeseq.${params.data_type}.unmap_cbub.bam \
+    ${samplename}.invadeseq.${params.data_type}.unmap_cbub.fasta \
+    ${samplename}.invadeseq.${params.data_type}.list \
+    ${samplename}.invadeseq.${params.data_type}.raw.readnamepath \
+    ${samplename}.invadeseq.${params.data_type}.genus.cell \
+    ${samplename}.invadeseq.${params.data_type}.genus.csv \
+    ${samplename}.invadeseq.${params.data_type}.validate.csv
+
+# Remove unneded files
+echo Removing unneeded files
+rm ${samplename}.invadeseq.${params.data_type}.genus.cell
+
+echo Done
     """
+}
+
+
+process combine_all {
+    container "${params.container__python}"
+    publishDir "${params.output_dir}", mode: 'copy', overwrite: true
+
+    input:
+    path "inputs/"
+
+    output:
+    path "csv_novami.csv"
+
+    script:
+    """#!/bin/bash
+set -e
+
+merge_dedup_metadata.py inputs/
+"""
 }

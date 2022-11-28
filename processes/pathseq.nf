@@ -19,6 +19,9 @@ set -euo pipefail
 echo Contents of pathseq database folder
 ls -lahtr pathseq_db
 
+echo Setting up a local tmp dir
+mkdir -p tmp
+
 gatk \
     --java-options "-Xmx${params.pathseq_mem_gb}g" \
     PathSeqPipelineSpark \
@@ -33,6 +36,7 @@ gatk \
     --scores-output ${samplename}.pathseq.complete.csv \
     --is-host-aligned false \
     --filter-duplicates false \
-    --min-score-identity ${params.pathseq_min_score_identity}
+    --min-score-identity ${params.pathseq_min_score_identity} \
+    --tmp-dir "\$PWD/tmp"
     """
 }

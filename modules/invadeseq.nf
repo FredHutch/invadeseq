@@ -101,9 +101,8 @@ workflow invadeseq_wf {
     cellranger_count_gex
         .out
         .transpose()
-        .view()
         .filter {
-            it[1].name.endsWith('barcodes.tsv.gz')
+            it[1].name.endsWith('filtered_feature_bc_matrix')
         }
         .set { cellranger_count_gex_barcodes }
 

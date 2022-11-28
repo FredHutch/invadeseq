@@ -3,7 +3,7 @@ process generate_umi {
     publishDir "${params.output_dir}/${samplename}/umi_${params.data_type}", mode: 'copy', overwrite: true
 
     input:
-    tuple val(samplename), path("pathseq_outputs/"), path(bam), path(barcodes)
+    tuple val(samplename), path("pathseq_outputs/"), path(bam), path("filtered_feature_bc_matrix")
 
     output:
     path "*"
@@ -25,7 +25,7 @@ echo
 UMI_matrix.py \
     ${bam} \
     '${samplename}' \
-    ${barcodes} \
+    filtered_feature_bc_matrix/barcodes.tsv.gz \
     pathseq_outputs/${samplename}.pathseq.complete.bam \
     pathseq_outputs/${samplename}.pathseq.complete.csv \
     ${samplename}.invadeseq.${params.data_type}.readname \

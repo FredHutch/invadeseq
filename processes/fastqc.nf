@@ -1,6 +1,6 @@
 // Run FastQC
 process fastqc {
-    container "${container__fastqc}"
+    container "${params.container__fastqc}"
     publishDir "${params.output_dir}/${sample}/${params.fastqc_subfolder}", mode: 'copy', overwrite: true
     label "cpu_large"
     tag "${sample}"

@@ -1,8 +1,10 @@
 // include { pathseq } from "./../processes/pathseq.nf"
-include { cellranger_count_gex } from "./../processes/cellranger.nf"
+include { cellranger_count as cellranger_count_gex } from "./../processes/cellranger.nf"
+include { cellranger_count as cellranger_count_16S } from "./../processes/cellranger.nf"
 include { pathseq as pathseq_gex } from "./../processes/pathseq.nf" addParams(pathseq_subfolder: "pathseq_gex")
 include { generate_umi_gex } from "./../processes/umi.nf"
 include { validate_manifest } from "./../processes/validate.nf"
+include { bam_to_fastq } from "./../processes/bedtools.nf"
 
 workflow invadeseq_wf {
 
@@ -104,17 +106,31 @@ workflow invadeseq_wf {
             )
     )
 
-    // //////////////////////
-    // // ANALYZE 16S DATA //
-    // //////////////////////
+    //////////////////////
+    // ANALYZE 16S DATA //
+    //////////////////////
 
-    // // Run cellranger count on the 16S data
-    // cellranger_count_16S(
-    //     manifest.map { it -> [it[0], it[2]] }
-    // )
+    // Run cellranger count on the 16S data
+    cellranger_count_16S(
+        manifest.map { it -> [it[0], it[2]] },
+        fastq_ch,
+        cellranger_db
+    )
 
-    // // Convert those BAM files to FASTQ
-    // bam_to_fastq(cellranger_count_16S.out)
+    // Make a channel with just the BAM produced by the cellranger count command
+    cellranger_count_16S
+        .out
+        .transpose()
+        .filter {
+            it[1].name.endsWith('.bam')
+        }
+        .set { cellranger_count_16S_bam }
+
+    // Convert those BAM files to FASTQ
+    bam_to_fastq(
+        cellranger_count_16S_bam
+    )
+    // Output: tuple val(sample), path(R1), path(R2)
 
     // // Run FASTQC on the raw reads
     // fastqc_raw(bam_to_fastq.out)

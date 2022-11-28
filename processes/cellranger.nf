@@ -1,4 +1,4 @@
-process cellranger_count_gex {
+process cellranger_count {
     container "${params.container__cellranger}"
     label "cpu_large"
     tag "${sample}"

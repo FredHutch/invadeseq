@@ -82,11 +82,6 @@ workflow invadeseq_wf {
         cellranger_db
     )
 
-    cellranger_count_gex
-        .out
-        .transpose()
-        .view()
-
     // Make a channel with just the BAM produced by the cellranger count command
     cellranger_count_gex
         .out

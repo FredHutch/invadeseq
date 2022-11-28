@@ -92,6 +92,11 @@ workflow invadeseq_wf {
         }
         .set { cellranger_count_gex_bam }
 
+    // Log the number of BAM files found
+    cellranger_count_gex_bam
+        .count()
+        .view { n -> "Generated BAM files from ${n} GEX samples" }
+
     // Make a channel with just the barcodes produced by the cellranger count command
     cellranger_count_gex
         .out
@@ -100,6 +105,11 @@ workflow invadeseq_wf {
             it[1].name.endsWith('barcodes.tsv.gz')
         }
         .set { cellranger_count_gex_barcodes }
+
+    // Log the number of barcodes files found
+    cellranger_count_gex_barcodes
+        .count()
+        .view { n -> "Generated barcodes files from ${n} GEX samples" }
 
     // Run pathseq on the output from cellranger count for the GEX data
     pathseq_gex(
@@ -116,7 +126,8 @@ workflow invadeseq_wf {
             )
             .join(
                 cellranger_count_gex_barcodes
-            )    )
+            )
+        )
 
     //////////////////////
     // ANALYZE 16S DATA //

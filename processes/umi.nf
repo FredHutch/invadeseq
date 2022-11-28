@@ -12,8 +12,9 @@ process generate_umi {
     """#!/bin/bash
 set -e
 
-echo CONTENTS OF cellranger_outputs/:
-ls -lah cellranger_outputs
+echo CONTENTS OF cellranger outputs:
+ls -lah ${bam}
+ls -lah filtered_feature_bc_matrix
 echo
 echo
 

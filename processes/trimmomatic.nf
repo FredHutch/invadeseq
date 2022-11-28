@@ -12,7 +12,7 @@ process trimmomatic {
 """#!/bin/bash
 set -euo pipefail
 
-EBROOTTRIMMOMATIC=/usr/local/share/trimmomatic-0.32-4/
+EBROOTTRIMMOMATIC=/usr/local/share/trimmomatic-0.32-4
 
 java -jar \
     \$EBROOTTRIMMOMATIC/trimmomatic.jar SE \

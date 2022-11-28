@@ -2,12 +2,14 @@
 include { cellranger_count as cellranger_count_gex } from "./../processes/cellranger.nf"
 include { cellranger_count as cellranger_count_16S } from "./../processes/cellranger.nf"
 include { pathseq as pathseq_gex } from "./../processes/pathseq.nf" addParams(pathseq_subfolder: "pathseq_gex")
+include { pathseq as pathseq_16S } from "./../processes/pathseq.nf" addParams(pathseq_subfolder: "pathseq_16S")
 include { generate_umi_gex } from "./../processes/umi.nf"
 include { validate_manifest } from "./../processes/validate.nf"
 include { bam_to_fastq } from "./../processes/bedtools.nf"
 include { fastqc as fastqc_raw } from "./../processes/fastqc.nf" addParams(fastqc_subfolder: "preqc")
 include { fastqc as fastqc_trimmed } from "./../processes/fastqc.nf" addParams(fastqc_subfolder: "postqc")
 include { trimmomatic } from "./../processes/trimmomatic.nf"
+include { fastq_to_bam } from "./../processes/picard.nf"
 
 workflow invadeseq_wf {
 
@@ -152,11 +154,14 @@ workflow invadeseq_wf {
     // Run FASTQC on the trimmed reads
     fastqc_trimmed(trimmomatic.out)
 
-    // // Make BAM files in preparation for pathseq
-    // fastq_to_bam(trimmomatic.out)
+    // Make BAM files in preparation for pathseq
+    fastq_to_bam(trimmomatic.out)
 
-    // // Run pathseq on the trimmed 16S data
-    // pathseq_16S(fastq_to_bam.out)
+    // Run pathseq on the trimmed 16S data
+    pathseq_16S(
+        fastq_to_bam.out,
+        pathseq_db
+    )
 
     // // Generate the UMI matrix for 16S data
     // generate_umi_16S(pathseq_gex.out)

@@ -23,9 +23,9 @@ echo
 echo
 
 UMI_matrix.py \
-    cellranger_outputs/*.bam \
+    cellranger_outputs/possorted_genome_bam.bam \
     '${samplename}' \
-    cellranger_outputs/*.barcodes.txt.gz \
+    cellranger_outputs/raw_feature_bc_matrix/barcodes.tsv.gz \
     pathseq_outputs/${samplename}.pathseq.complete.bam \
     pathseq_outputs/${samplename}.pathseq.complete.csv \
     ${samplename}.visium.raw_matrix.readname \

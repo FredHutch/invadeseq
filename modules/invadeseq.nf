@@ -134,13 +134,6 @@ workflow invadeseq_wf {
     cellranger_aggr(
         cellranger_count_gex
             .out
-            .transpose()
-            .filter {
-                it[1].name.endsWith('molecule_info.h5')
-            }
-            .map {
-                it -> it[1].renameTo("${it[0]}.h5")
-            }
             .toSortedList()
     )
 

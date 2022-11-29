@@ -39,8 +39,9 @@ set -e
 
 echo sample_id,molecule_h5 > libraries.csv
 
-for f in inputs/*.h5; do
-    echo \$(echo \$f | sed 's/inputs\\//' | sed 's/.h5//'),\$f >> libraries.csv
+find . -name molecule_info.h5 | while read f; do
+    n=\$(echo \$f | sed 's/\\\.*//')
+    echo \$n,\$f >> libraries.csv
 done
 
 cat libraries.csv

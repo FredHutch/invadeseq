@@ -196,6 +196,8 @@ workflow invadeseq_wf {
     //////////////////////////////
     // COMBINE GEX AND 16S DATA //
     //////////////////////////////
+
+    combine_all(
     generate_umi_gex
         .out
         .flatten()
@@ -204,21 +206,10 @@ workflow invadeseq_wf {
                 .out
                 .flatten()
         )
-        .view()
-
-//     combine_all(
-//         generate_umi_gex
-//             .out
-//             .flatten()
-//             .mix(
-//                 generate_umi_16S
-//                     .out
-//                     .flatten()
-//             )
-//             .filter {
-//                 it.name.endsWith('genus.csv')
-//             }
-//             .toSortedList()
-//    )
+        .filter {
+            it.name.endsWith('genus.csv')
+        }
+        .toSortedList()
+   )
 
 }

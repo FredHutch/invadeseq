@@ -57,8 +57,10 @@ set -e
 echo sample_id,molecule_h5 > libraries.csv
 
 for fp in *.molecule_info.h5; do
-    sample=\$(echo \$fp | sed 's/.molecule_info.h5//')
-    echo \$sample,\$fp >> libraries.csv
+    if [ -s \$fp ]; then
+        sample=\$(echo \$fp | sed 's/.molecule_info.h5//')
+        echo \$sample,\$fp >> libraries.csv
+    fi
 done
 
 cat libraries.csv

@@ -135,11 +135,15 @@ workflow invadeseq_wf {
     cellranger_count_gex
         .out
         .transpose()
+        .view()
         .filter {
             it[1].name.endsWith('molecule_info.h5')
-        } \
+        }
+        .view() \
         | cellranger_rename \
+        | view \
         | toSortedList \
+        | view \
         | cellranger_aggr
 
     //////////////////////

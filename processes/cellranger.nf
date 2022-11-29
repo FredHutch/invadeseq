@@ -1,6 +1,6 @@
 process cellranger_count {
     container "${params.container__cellranger}"
-    publishDir "${params.output_dir}/${samplename}/cellranger_${params.data_type}", mode: 'copy', overwrite: true
+    publishDir "${params.output_dir}/${sample}/cellranger_${params.data_type}", mode: 'copy', overwrite: true
     label "cpu_large"
     tag "${sample}"
 

@@ -199,6 +199,11 @@ workflow invadeseq_wf {
     generate_umi_gex
         .out
         .flatten()
+        .mix(
+            generate_umi_16S
+                .out
+                .flatten()
+        )
         .view()
 
 //     combine_all(

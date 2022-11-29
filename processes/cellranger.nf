@@ -22,3 +22,31 @@ cellranger count \
     --sample=${gex_id}
     """
 }
+
+process cellranger_aggr {
+    container "${params.container__cellranger}"
+    publishDir "${params.output_dir}/", mode: 'copy', overwrite: true
+    label "cpu_large"
+
+    input:
+    path "inputs/"
+
+    output:
+    path "gex/*"
+
+    """#!/bin/bash
+set -e
+
+echo sample_id,molecule_h5 > libraries.csv
+
+for f in inputs/*.h5; do
+    echo \$(echo \$f | sed 's/inputs\\//' | sed 's/.h5//'),\$f >> libraries.csv
+done
+
+cat libraries.csv
+
+cellranger aggr \
+    --id=gex \
+    --csv=libraries.csv
+    """
+}

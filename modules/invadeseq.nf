@@ -1,6 +1,7 @@
 // include { pathseq } from "./../processes/pathseq.nf"
 include { cellranger_count as cellranger_count_gex } from "./../processes/cellranger.nf" addParams(data_type: "gex")
 include { cellranger_count as cellranger_count_16S } from "./../processes/cellranger.nf" addParams(data_type: "16S")
+include { cellranger_rename } from "./../processes/cellranger.nf"
 include { cellranger_aggr } from "./../processes/cellranger.nf"
 include { pathseq as pathseq_gex } from "./../processes/pathseq.nf" addParams(pathseq_subfolder: "pathseq_gex")
 include { pathseq as pathseq_16S } from "./../processes/pathseq.nf" addParams(pathseq_subfolder: "pathseq_16S")
@@ -131,13 +132,15 @@ workflow invadeseq_wf {
         )
 
     // Aggregate all of the GEX count data
-    cellranger_aggr(
-        cellranger_count_gex
-            .out
-            .map { it -> it[1] }
-            .flatten()
-            .toSortedList()
-    )
+    cellranger_count_gex
+        .out
+        .transpose()
+        .filter {
+            it[1].name.endsWith('molecule_info.h5')
+        } \
+        | cellranger_rename \
+        | toSortedList \
+        | cellranger_aggr
 
     //////////////////////
     // ANALYZE 16S DATA //

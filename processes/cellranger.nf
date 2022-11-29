@@ -23,13 +23,30 @@ cellranger count \
     """
 }
 
+process cellranger_rename {
+    container "${params.container__cellranger}"
+    label "io_limited"
+
+    input:
+    tuple val(sample), path("molecule_info.h5")
+
+    output:
+    path "${sample}.molecule_info.h5"
+
+    """#!/bin/bash
+set -e
+
+cp molecule_info.h5 ${sample}.molecule_info.h5
+    """
+}
+
 process cellranger_aggr {
     container "${params.container__cellranger}"
     publishDir "${params.output_dir}/", mode: 'copy', overwrite: true
     label "cpu_large"
 
     input:
-    path "inputs/"
+    path "*"
 
     output:
     path "gex/*"
@@ -39,10 +56,9 @@ set -e
 
 echo sample_id,molecule_h5 > libraries.csv
 
-for sample in *; do
-    if [ -s \$sample/outs/molecule_info.h5 ]; then
-        echo \$sample,\$sample/outs/molecule_info.h5 >> libraries.csv
-    fi
+for fp in *.molecule_info.h5; do
+    sample=\$(echo \$fp | sed 's/.molecule_info.h5//')
+    echo \$sample,\$fp >> libraries.csv
 done
 
 cat libraries.csv

@@ -134,6 +134,7 @@ workflow invadeseq_wf {
     cellranger_aggr(
         cellranger_count_gex
             .out
+            .map { it -> it[1] }
             .toSortedList()
     )
 

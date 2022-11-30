@@ -1,6 +1,7 @@
 process generate_umi {
     container "${params.container__python}"
     publishDir "${params.output_dir}/${samplename}/umi_${params.data_type}", mode: 'copy', overwrite: true
+    tag "${samplename}"
 
     input:
     tuple val(samplename), path("pathseq_outputs/"), path(bam), path("filtered_feature_bc_matrix")

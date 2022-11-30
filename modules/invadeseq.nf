@@ -1,6 +1,8 @@
 // include { pathseq } from "./../processes/pathseq.nf"
-include { cellranger_count as cellranger_count_gex } from "./../processes/cellranger.nf"
-include { cellranger_count as cellranger_count_16S } from "./../processes/cellranger.nf"
+include { cellranger_count as cellranger_count_gex } from "./../processes/cellranger.nf" addParams(data_type: "gex")
+include { cellranger_count as cellranger_count_16S } from "./../processes/cellranger.nf" addParams(data_type: "16S")
+include { cellranger_rename } from "./../processes/cellranger.nf"
+include { cellranger_aggr } from "./../processes/cellranger.nf"
 include { pathseq as pathseq_gex } from "./../processes/pathseq.nf" addParams(pathseq_subfolder: "pathseq_gex")
 include { pathseq as pathseq_16S } from "./../processes/pathseq.nf" addParams(pathseq_subfolder: "pathseq_16S")
 include { generate_umi as generate_umi_gex } from "./../processes/umi.nf" addParams(data_type: "gex")
@@ -129,6 +131,24 @@ workflow invadeseq_wf {
             )
         )
 
+    // Aggregate all of the GEX count data
+    cellranger_count_gex
+        .out
+        .transpose()
+        .filter {
+            it[1].name.endsWith('molecule_info.h5')
+        }
+        .set { cellranger_count_gex_h5 }
+
+        cellranger_count_gex_h5
+            .count()
+            .view { n -> "Merging ${n} CellRanger counts results" }
+
+        cellranger_count_gex_h5 \
+        | cellranger_rename \
+        | toSortedList \
+        | cellranger_aggr
+
     //////////////////////
     // ANALYZE 16S DATA //
     //////////////////////
@@ -196,24 +216,20 @@ workflow invadeseq_wf {
     //////////////////////////////
     // COMBINE GEX AND 16S DATA //
     //////////////////////////////
+
+    combine_all(
     generate_umi_gex
         .out
         .flatten()
-        .view()
-
-//     combine_all(
-//         generate_umi_gex
-//             .out
-//             .flatten()
-//             .mix(
-//                 generate_umi_16S
-//                     .out
-//                     .flatten()
-//             )
-//             .filter {
-//                 it.name.endsWith('genus.csv')
-//             }
-//             .toSortedList()
-//    )
+        .mix(
+            generate_umi_16S
+                .out
+                .flatten()
+        )
+        .filter {
+            it.name.endsWith('genus.csv')
+        }
+        .toSortedList()
+   )
 
 }

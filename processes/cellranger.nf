@@ -49,7 +49,7 @@ process cellranger_aggr {
     path "*"
 
     output:
-    path "gex/*"
+    path "gex/outs/*"
 
     """#!/bin/bash
 set -e

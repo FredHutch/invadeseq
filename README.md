@@ -90,7 +90,7 @@ The required parameters for the workflow are:
  - `pathseq_db`: Folder containing the PathSeq database
  - `cellranger_version`: Version of the CellRanger software to use
  - `gex_chemistry`: Optionally specify the chemistry used for GEX data (default: auto)
- - `16S_chemistry`: Optionally specify the chemistry used for 16S data (default: SC5P-PE)
+ - `microb_chemistry`: Optionally specify the chemistry used for 16S data (default: SC5P-PE)
 
  ### Launching the Workflow
 

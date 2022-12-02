@@ -33,7 +33,7 @@
             "wb_type": "string",
             "default": "auto"
         },
-        "16S_chemistry": {
+        "microb_chemistry": {
             "help": "Optionally specify the chemistry used for 16S data",
             "wb_type": "string",
             "default": "SC5P-PE"

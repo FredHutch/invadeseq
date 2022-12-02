@@ -88,6 +88,9 @@ The required parameters for the workflow are:
  - `fastq_dir`: Base folder which contains all of the FASTQ inputs
  - `cellranger_db`: Folder containing CellRanger database
  - `pathseq_db`: Folder containing the PathSeq database
+ - `cellranger_version`: Version of the CellRanger software to use
+ - `gex_chemistry`: Optionally specify the chemistry used for GEX data (default: auto)
+ - `16S_chemistry`: Optionally specify the chemistry used for 16S data (default: SC5P-PE)
 
  ### Launching the Workflow
 

@@ -1,6 +1,6 @@
 // include { pathseq } from "./../processes/pathseq.nf"
-include { cellranger_count as cellranger_count_gex } from "./../processes/cellranger.nf" addParams(data_type: "gex", chemistry: "${params.gex_chemistry}")
-include { cellranger_count as cellranger_count_16S } from "./../processes/cellranger.nf" addParams(data_type: "16S", chemistry: "${params.16S_chemistry}")
+include { cellranger_count as cellranger_count_gex } from "./../processes/cellranger.nf" addParams(data_type: "gex")
+include { cellranger_count as cellranger_count_16S } from "./../processes/cellranger.nf" addParams(data_type: "16S")
 include { cellranger_rename } from "./../processes/cellranger.nf"
 include { cellranger_aggr } from "./../processes/cellranger.nf"
 include { pathseq as pathseq_gex } from "./../processes/pathseq.nf" addParams(pathseq_subfolder: "pathseq_gex")

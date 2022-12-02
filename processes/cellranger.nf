@@ -19,8 +19,7 @@ cellranger count \
     --id=${sample} \
     --transcriptome=\$PWD/cellranger_db/ \
     --fastqs=fastqs/ \
-    --sample=${gex_id} \
-    --chemistry=${params.chemistry}
+    --sample=${gex_id}
     """
 }
 

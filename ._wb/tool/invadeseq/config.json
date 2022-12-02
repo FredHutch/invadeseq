@@ -22,21 +22,6 @@
             "help": "Folder containing pathseq database",
             "wb_type": "folder",
             "required": true
-        },
-        "cellranger_version": {
-            "help": "Version of the CellRanger software to use",
-            "wb_type": "string",
-            "default": "6.1.1"
-        },
-        "gex_chemistry": {
-            "help": "Optionally specify the chemistry used for GEX data",
-            "wb_type": "string",
-            "default": "auto"
-        },
-        "16S_chemistry": {
-            "help": "Optionally specify the chemistry used for 16S data",
-            "wb_type": "string",
-            "default": "SC5P-PE"
         }
     }
 }

@@ -254,7 +254,7 @@ workflow invadeseq_wf {
         .toSortedList()
 
     deduplication(
-        combine_all.out
+        combine_all.out,
         validate_csv_list_16S,
         validate_csv_list_gex
     )

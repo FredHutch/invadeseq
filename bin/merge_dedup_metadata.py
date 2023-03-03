@@ -34,6 +34,4 @@ if __name__ == "__main__":
         df1 = merge_cellsmeta2(df1,df2)
 
     df1 = df1.fillna(0)
-    df1_dedup = df1.groupby(['barcode'], as_index=False).agg('sum')
-    df1_dedup.to_csv(csv_merged,sep=',',index=False)
-
+    df1.to_csv(csv_merged,sep=',',index=False)

@@ -8,6 +8,7 @@ include { pathseq as pathseq_16S } from "./../processes/pathseq.nf" addParams(pa
 include { generate_umi as generate_umi_gex } from "./../processes/umi.nf" addParams(data_type: "gex")
 include { generate_umi as generate_umi_16S } from "./../processes/umi.nf" addParams(data_type: "16S")
 include { combine_all } from "./../processes/umi.nf"
+include { deduplication } from "./../processes/umi.nf"
 include { validate_manifest } from "./../processes/validate.nf"
 include { bam_to_fastq } from "./../processes/bedtools.nf"
 include { fastqc as fastqc_raw } from "./../processes/fastqc.nf" addParams(fastqc_subfolder: "preqc")
@@ -217,8 +218,7 @@ workflow invadeseq_wf {
     // COMBINE GEX AND 16S DATA //
     //////////////////////////////
 
-    combine_all(
-    generate_umi_gex
+    genus_csv_list = generate_umi_gex
         .out
         .flatten()
         .mix(
@@ -230,6 +230,32 @@ workflow invadeseq_wf {
             it.name.endsWith('genus.csv')
         }
         .toSortedList()
-   )
 
+    combine_all(genus_csv_list)
+
+   ///////////////////////////
+   // PERFORM DEDUPLICATION //
+   ///////////////////////////
+
+    validate_csv_list_16S = generate_umi_16S
+        .out
+        .flatten()
+        .filter {
+            it.name.endsWith('validate.csv')
+        }
+        .toSortedList()
+
+    validate_csv_list_gex = generate_umi_gex
+        .out
+        .flatten()
+        .filter {
+            it.name.endsWith('validate.csv')
+        }
+        .toSortedList()
+
+    deduplication(
+        combine_all.out
+        validate_csv_list_16S,
+        validate_csv_list_gex
+    )
 }

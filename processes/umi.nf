@@ -65,3 +65,27 @@ set -e
 merge_dedup_metadata.py inputs/
 """
 }
+
+process deduplication {
+    container "${params.container__python}"
+    publishDir "${params.output_dir}", mode: 'copy', overwrite: true
+
+    input:
+    path "csv_novami.csv"
+    path "16S_validate/"
+    path "GEX_validate/"
+
+    output:
+    path "csv_dedup.csv"
+
+    script:
+    """#!/bin/bash
+set -e
+
+deduplication.py \
+    GEX_validate \
+    16S_validate \
+    csv_novami.csv \
+    csv_dedup.csv
+"""
+}

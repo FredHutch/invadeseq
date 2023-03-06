@@ -111,7 +111,7 @@ def run():
                 # Add the sample name to each row and extend UMI_bac_list
                 UMI_bac_list.extend(
                     read_and_mkdic(
-                        file.absolute,
+                        file.absolute(),
                         'sample_'+ sample_name
                     )
                 )

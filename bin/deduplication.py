@@ -112,7 +112,7 @@ def run():
                 UMI_bac_list.extend(
                     read_and_mkdic(
                         file.absolute(),
-                        'sample_'+ sample_name
+                        sample_name
                     )
                 )
 
